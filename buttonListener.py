@@ -6,6 +6,7 @@ import paho.mqtt.client as mqtt
 print("RPi.GPIO version: " + GPIO.VERSION)
 
 buttonPins = {12:'UP',13:'RIGHT',14:'DOWN',15:'LEFT'}
+ledPin = 2
 client = mqtt.Client()
 
 # callbacks
@@ -17,7 +18,7 @@ def on_connect(client, userdata, flags, rc):
     print("Connected to broker with result code " + str(rc))
 
 GPIO.setmode(GPIO.BCM) # BCM numbering should be the one as labelled on the shield
-GPIO.setup(2,GPIO.OUT) # LED output
+GPIO.setup(ledPin,GPIO.OUT) # LED output
 
 # Enable all buttons and add event
 for pin in buttonPins:
@@ -31,9 +32,9 @@ client.loop_start()
 try:
     # Blink led as status light
     while True:
-        GPIO.output(2,True)
+        GPIO.output(ledPin, True)
         time.sleep(2.0)
-        GPIO.output(2, False)
+        GPIO.output(ledPin, False)
         time.sleep(2.0)
 
 except KeyboardInterrupt:
