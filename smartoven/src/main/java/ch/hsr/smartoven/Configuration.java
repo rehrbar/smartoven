@@ -40,7 +40,7 @@ public class Configuration {
 				throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
 			}
 			
-			mqttBroker = prop.getProperty("mqttBroker", "127.0.0.1");
+			mqttBroker = prop.getProperty("mqttBroker", "tcp://127.0.0.1:1883");
 			clientId = prop.getProperty("clientId", "SmartOven");
 		} catch (Exception e) {
 			System.out.println("Exception: " + e);
