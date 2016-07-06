@@ -8,14 +8,15 @@ GPIO.setmode(GPIO.BCM)
 
 GPIO.setup(2,GPIO.OUT)
 
-buttonPins =  [12,13,14,15]
-GPIO.setup(buttonPins,GPIO.IN, pull_up_down=GPIO.PUD_UP)
+buttonPins = {12:'UP',13:'RIGHT',14:'DOWN',15:'LEFT'}
 
 def button_callback(channel):
-    print("Callback on " + channel)
+    print("Callback on " + buttonPins[channel])
 
+for pin in buttonPins:
+    GPIO.setup(pin,GPIO.IN)
+    GPIO.add_event_detect(pin, GPIO.FALLING, callback=button_callback, bouncetime=400)
 
-GPIO.add_event_detect(buttonPins, GPIO.FALLING, callback=button_callback, bouncetime=200)
 
 try:
     while True:
