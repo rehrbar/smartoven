@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 import RPi.GPIO as GPIO
+import time
+print(GPIO.VERSION)
 
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 
 GPIO.setup(2,GPIO.OUT)
-GPIO.output(pin,True)
 
 buttonPins =  [12,13,14,15]
 GPIO.setup(buttonPins,GPIO.OUT)
