@@ -1,0 +1,27 @@
+{
+  "note": "Home Connect mock.",
+  "mockDirectory": "./mocks",
+  "staticDirectory": "",
+  "staticPath": "",
+  "quiet": false,
+  "port": "7878",
+  "latency": 50,
+  "logRequestHeaders": false,
+  "webServices": {
+    "homeappliances":{
+      "mockFile": "appliances.json",
+	  "verbs": ["get"]
+	},
+	"homeappliances/:haid/programs/active":{
+	  "verbs": ["put","delete"],
+      "responses": {
+        "put": {"httpStatus": 204},
+        "delete": {"httpStatus": 204}
+	  }
+	},
+	"homeappliances/:haid/events":{
+      "mockFile": "events.json",
+	  "verbs": ["get"]
+	}
+  }
+}

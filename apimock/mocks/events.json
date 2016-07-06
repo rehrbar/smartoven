@@ -1,0 +1,11 @@
+{
+  "data": {
+	"program": "",
+    "status": [
+      {
+		"key":"BSH.Common.Status.RemoteControlActive",
+		"value":true
+	  }
+    ]
+  }
+}

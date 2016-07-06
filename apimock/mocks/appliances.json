@@ -1,0 +1,22 @@
+{
+  "data": {
+    "homeappliances": [
+      {
+        "brand": "BOSCH",
+        "vib": "HNG6764B6",
+        "connected": false,
+        "type": "Oven",
+        "enumber": "HNG6764B6/09",
+        "haId": "BOSCH-HNG6764B6-0000000011FF"
+      },
+      {
+        "brand": "SIEMENS",
+        "vib": "CS658GRS6",
+        "connected": true,
+        "type": "Oven",
+        "enumber": "CS658GRS6/01",
+        "haId": "SIEMENS-CS658GRS6-000000001234"
+      }
+    ]
+  }
+}
