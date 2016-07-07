@@ -20,6 +20,7 @@ import ch.hsr.smartoven.state.OvenOption;
 import ch.hsr.smartoven.state.OvenState;
 import ch.hsr.smartoven.state.OvenStateList;
 import ch.hsr.smartoven.state.OvenStateNumber;
+import ch.hsr.smartoven.timer.BakingTimer;
 import ch.hsr.smartoven.timer.InactivityTimer;
 
 public class ApplicationStart {
@@ -43,21 +44,6 @@ public class ApplicationStart {
 			MemoryPersistence persistence = new MemoryPersistence();
 			MqttClient sampleClient = new MqttClient(config.getMqttBroker(), config.getClientId(), persistence);
 			setupMqttReciever(config, sampleClient, ovenClient, inactivityTimer);
-			
-			
-//			ovenClient.setCurrentState(ovenClient.getMainState());
-//			ovenClient.setCurrentState(ovenClient.getCurrentState().moveRight());
-//			inactivityTimer.resetTimer(ovenClient);
-//			ovenClient.setCurrentState(ovenClient.getCurrentState().moveDown());
-//			inactivityTimer.resetTimer(ovenClient);
-//			ovenClient.setCurrentState(ovenClient.getCurrentState().moveRight());
-//			inactivityTimer.resetTimer(ovenClient);
-//			ovenClient.setCurrentState(ovenClient.getCurrentState().moveRight());
-//			inactivityTimer.resetTimer(ovenClient);
-//			ovenClient.setCurrentState(ovenClient.getCurrentState().moveRight());
-//			inactivityTimer.resetTimer(ovenClient);
-//			ovenClient.setCurrentState(ovenClient.getCurrentState().moveRight());
-//			inactivityTimer.resetTimer(ovenClient);
 			
 			System.out.println("Press RETURN to close...");
 			System.in.read();
@@ -91,42 +77,50 @@ public class ApplicationStart {
 		
 		List<OvenOption> actionOptions = new ArrayList<OvenOption>();
 		actionOptions.add(new OvenOption("Stop Program", mainStatus));
+		actionOptions.add(new OvenOption("Start Program", chooseModeStatus));
+		chooseActionStatus.setOptions(actionOptions);
 
-		ExecuteCommand stopCommand = new ExecuteCommand() {
+		
+		
+		List<OvenOption> mainOptions = new ArrayList<OvenOption>();
+		mainOptions.add(new OvenOption("Choose Action", chooseActionStatus));
+		mainStatus.setOptions(mainOptions);
+		
+		final OvenClient ovenClient = new OvenClient(mainStatus);
+		
+ExecuteCommand stopCommand = new ExecuteCommand() {
 			
 			public void execute(OvenState state) {
 				if(state.getSelectedValue().equals("Stop Program") && state.getStatename().equals("Choose Action State")){
-					oven.stopProgram();
-					oven.setIsBaking(false);
-					SpeechUtil.talkMessage("Stopping Program");
+					if(oven.stopProgram()){
+						oven.setIsBaking(false);
+						ovenClient.stopBakingTimer();
+						SpeechUtil.talkMessage("Stopping Program");
+					}
 					mainStatus.setMessageText(oven.isBaking()?"Oven Status is Baking":"Oven Status is Not Baking");
 				}
 				
 			}
 		};
-		actionOptions.add(new OvenOption("Start Program", chooseModeStatus));
+		
 		ExecuteCommand startCommand = new ExecuteCommand() {
 			
 			public void execute(OvenState state) {
 					CookingProgram program = CookingProgram.mapProgramToString(state.getPrevious().getPrevious().getSelectedValue());
 					int temperature = Integer.parseInt(state.getPrevious().getSelectedValue());
 					int minutes = Integer.parseInt(state.getSelectedValue());
-					oven.startProgram(program, temperature, minutes * 60);
-					oven.setIsBaking(true);
-					SpeechUtil.talkMessage("Starting Program now");
+					if(oven.startProgram(program, temperature, minutes * 60)){
+						oven.setIsBaking(true);
+						ovenClient.startBakingTimer(minutes*60, oven);
+						SpeechUtil.talkMessage("Starting Program now");
+					}
 					mainStatus.setMessageText(oven.isBaking()?"Oven is Baking":"Oven is Not Baking");
 				
 			}
 		};
-		chooseActionStatus.setOptions(actionOptions);
+		
 		chooseActionStatus.setSendFunction(stopCommand);
 		timeStatus.setSendFunction(startCommand);
-		
-		List<OvenOption> mainOptions = new ArrayList<OvenOption>();
-		mainOptions.add(new OvenOption("Choose Action", chooseActionStatus));
-		mainStatus.setOptions(mainOptions);
-		
-		OvenClient ovenClient = new OvenClient(mainStatus);
 		return ovenClient;
 	}
 

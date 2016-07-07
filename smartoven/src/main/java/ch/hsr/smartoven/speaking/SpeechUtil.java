@@ -12,10 +12,8 @@ public class SpeechUtil {
 			Process p = Runtime.getRuntime().exec("espeak \"" + message +"\"");
 			p.waitFor();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

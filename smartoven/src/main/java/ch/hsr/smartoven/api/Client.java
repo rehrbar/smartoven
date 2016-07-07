@@ -15,6 +15,7 @@ import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 
 import ch.hsr.smartoven.api.appliance.HomeAppliance;
+import ch.hsr.smartoven.speaking.SpeechUtil;
 
 public class Client {
 
@@ -29,7 +30,7 @@ public class Client {
 	/**
 	 * Starts a specific program on the device.
 	 */
-	public void startProgram(String haId, String body){
+	public boolean startProgram(String haId, String body){
 		try {
             OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
 			OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(baseUri+"/homeappliances/"+haId+"/programs/active")
@@ -40,16 +41,18 @@ public class Client {
 			
 			oAuthClient.resource(bearerClientRequest, OAuth.HttpMethod.PUT, OAuthResourceResponse.class);
 		} catch (OAuthSystemException | OAuthProblemException e) {
-			e.printStackTrace();
+			SpeechUtil.talkMessage("Error occurred. Program not started");
+			return false;
 		}
 		System.out.println(String.format("Starting program... haId: %s - %s",haId, body));
+		return true;
 	}
 	
 
 	/**
 	 * Stops all programs on the device.
 	 */
-	public void stopProgram(String haId){
+	public boolean stopProgram(String haId){
 		try {
             OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
 			OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(baseUri+"/homeappliances/"+haId+"/programs/active")
@@ -58,9 +61,10 @@ public class Client {
 			
 			oAuthClient.resource(bearerClientRequest, OAuth.HttpMethod.DELETE, OAuthResourceResponse.class);
 		} catch (OAuthSystemException | OAuthProblemException e) {
-			e.printStackTrace();
+			return false;
 		}
 		System.out.println("Stopping active program...");
+		return true;
 	}
 	
 	/**

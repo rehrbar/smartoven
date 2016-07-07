@@ -34,6 +34,7 @@ public class MqttSubscriber implements MqttCallback {
 			if(ovenClient.getCurrentState()==null){
 				ovenClient.setCurrentState(ovenClient.getMainState());
 				ovenClient.getCurrentState().enter();
+				inactivityTimer.resetTimer(ovenClient);
 			} else {
 				ovenClient.setCurrentState(ovenClient.getCurrentState().moveUp());
 				inactivityTimer.resetTimer(ovenClient);
@@ -43,6 +44,7 @@ public class MqttSubscriber implements MqttCallback {
 			if(ovenClient.getCurrentState()==null){
 				ovenClient.setCurrentState(ovenClient.getMainState());
 				ovenClient.getCurrentState().enter();
+				inactivityTimer.resetTimer(ovenClient);
 			} else {
 				ovenClient.setCurrentState(ovenClient.getCurrentState().moveDown());
 				inactivityTimer.resetTimer(ovenClient);
@@ -52,6 +54,7 @@ public class MqttSubscriber implements MqttCallback {
 			if(ovenClient.getCurrentState()==null){
 				ovenClient.setCurrentState(ovenClient.getMainState());
 				ovenClient.getCurrentState().enter();
+				inactivityTimer.resetTimer(ovenClient);
 			} else {
 				ovenClient.setCurrentState(ovenClient.getCurrentState().moveLeft());
 				inactivityTimer.resetTimer(ovenClient);
@@ -61,6 +64,7 @@ public class MqttSubscriber implements MqttCallback {
 			if(ovenClient.getCurrentState()==null){
 				ovenClient.setCurrentState(ovenClient.getMainState());
 				ovenClient.getCurrentState().enter();
+				inactivityTimer.resetTimer(ovenClient);
 			} else {
 				ovenClient.setCurrentState(ovenClient.getCurrentState().moveRight());
 				inactivityTimer.resetTimer(ovenClient);

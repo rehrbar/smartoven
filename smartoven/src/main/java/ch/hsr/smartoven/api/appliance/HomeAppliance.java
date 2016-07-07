@@ -42,7 +42,7 @@ public abstract class HomeAppliance {
 		return haId;
 	}
 	
-	public void stopProgram(){
-		client.stopProgram(haId);
+	public boolean stopProgram(){
+		return client.stopProgram(haId);
 	}
 }
