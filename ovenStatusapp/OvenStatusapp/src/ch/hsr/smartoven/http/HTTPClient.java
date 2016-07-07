@@ -1,4 +1,4 @@
-package ch.hsr.sjost.oven.http;
+package ch.hsr.smartoven.http;
 
 public class HTTPClient {
 	

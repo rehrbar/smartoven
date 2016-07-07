@@ -1,4 +1,4 @@
-package ch.hsr.sjost.oven.state;
+package ch.hsr.smartoven.state;
 
 public interface FireEventDecorator {
 	

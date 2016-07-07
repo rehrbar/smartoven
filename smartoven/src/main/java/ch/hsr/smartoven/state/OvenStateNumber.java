@@ -1,6 +1,7 @@
-package ch.hsr.sjost.oven.state;
+package ch.hsr.smartoven.state;
 
-import ch.hsr.sjost.oven.speaking.SpeechUtil;
+import ch.hsr.smartoven.http.ExecuteCommand;
+import ch.hsr.smartoven.speaking.SpeechUtil;
 
 public class OvenStateNumber extends OvenState {
 
@@ -11,7 +12,15 @@ public class OvenStateNumber extends OvenState {
 	private int value;
 	
 	public OvenStateNumber(String statename, String messagetext, int interval, int startvalue, int lowerLimit, int upperLimit, OvenState nextState) {
-		super(statename, messagetext);
+		super(statename, messagetext, null);
+		this.interval = interval;
+		this.value = startvalue;
+		this.lowerLimit = lowerLimit;
+		this.upperLimit = upperLimit;
+		this.nextState = nextState;
+	}
+	public OvenStateNumber(String statename, String messagetext, int interval, int startvalue, int lowerLimit, int upperLimit, OvenState nextState, ExecuteCommand sendFunction) {
+		super(statename, messagetext, sendFunction);
 		this.interval = interval;
 		this.value = startvalue;
 		this.lowerLimit = lowerLimit;
@@ -37,6 +46,7 @@ public class OvenStateNumber extends OvenState {
 
 	@Override
 	public OvenState moveRight() {
+		executeCallable();
 		nextState.setPrevious(this);
 		nextState.enter();
 		return nextState;
@@ -44,8 +54,13 @@ public class OvenStateNumber extends OvenState {
 	
 	@Override
 	public void enter(){
-		super.enter();
-		SpeechUtil.talkMessage("The selected Number is "+value);
+//		SpeechUtil.talkMessage("The selected Value is "+value);
+		System.out.println("The selected Value is "+value);
+	}
+
+	@Override
+	public String getSelectedValue() {
+		return String.valueOf(value);
 	}
 
 }

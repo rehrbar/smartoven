@@ -1,8 +1,8 @@
-package ch.hsr.sjost.oven.state;
+package ch.hsr.smartoven.state;
 
 import java.util.List;
 
-import ch.hsr.sjost.oven.speaking.SpeechUtil;
+import ch.hsr.smartoven.speaking.SpeechUtil;
 
 public class OvenStateList extends OvenState {
 

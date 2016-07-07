@@ -1,15 +1,15 @@
-package ch.hsr.sjost.oven.main;
+package ch.hsr.smartoven.client;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.hsr.sjost.oven.state.OvenOption;
-import ch.hsr.sjost.oven.state.OvenState;
-import ch.hsr.sjost.oven.state.OvenStateList;
-import ch.hsr.sjost.oven.state.OvenStateNumber;
-import ch.hsr.sjost.oven.timer.InactivityTimer;
+import ch.hsr.smartoven.state.OvenOption;
+import ch.hsr.smartoven.state.OvenState;
+import ch.hsr.smartoven.state.OvenStateList;
+import ch.hsr.smartoven.state.OvenStateNumber;
+import ch.hsr.smartoven.timer.InactivityTimer;
 
-public class OvenMain {
+public class OvenClient {
 
 	OvenState currentState = null;
 	OvenState mainState = null;
@@ -40,7 +40,7 @@ public class OvenMain {
 		mainStatus.setOptions(mainOptions);
 		
 		
-		OvenMain exec = new OvenMain(mainStatus);
+		OvenClient exec = new OvenClient(mainStatus);
 		new InactivityTimer(exec);
 		try {
 		exec.currentState = mainStatus;
@@ -69,7 +69,7 @@ public class OvenMain {
 
 	}
 
-	public OvenMain(OvenState mainStatus){
+	public OvenClient(OvenState mainStatus){
 		this.mainState = mainStatus;
 	}
 	

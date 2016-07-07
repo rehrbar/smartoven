@@ -1,4 +1,4 @@
-package ch.hsr.sjost.oven.speaking;
+package ch.hsr.smartoven.speaking;
 
 import java.io.IOException;
 

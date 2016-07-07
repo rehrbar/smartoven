@@ -15,7 +15,7 @@ public class Client {
 	/**
 	 * Starts a specific program on the device.
 	 */
-	public void StartProgram(String haId, String body){
+	public void startProgram(String haId, String body){
 		// HTTP PUT
 		// TODO implement this
 		System.out.println(String.format("Starting program... haId: %s - %s",haId, body));
@@ -25,7 +25,7 @@ public class Client {
 	/**
 	 * Stops all programs on the device.
 	 */
-	public void StopProgram(){
+	public void stopProgram(String haId){
 		// HTTP DELETE
 		// TODO implement this
 		System.out.println("Stopping active program...");

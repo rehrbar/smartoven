@@ -1,6 +1,6 @@
-package ch.hsr.sjost.oven.state;
+package ch.hsr.smartoven.state;
 
-import ch.hsr.sjost.oven.speaking.SpeechUtil;
+import ch.hsr.smartoven.speaking.SpeechUtil;
 
 public abstract class OvenState {
 

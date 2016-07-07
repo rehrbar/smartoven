@@ -1,6 +1,6 @@
-package ch.hsr.sjost.oven.state;
+package ch.hsr.smartoven.state;
 
-import ch.hsr.sjost.oven.http.HTTPClient;
+import ch.hsr.smartoven.http.HTTPClient;
 
 public class FireStartOvenOption extends OvenOption {
 	

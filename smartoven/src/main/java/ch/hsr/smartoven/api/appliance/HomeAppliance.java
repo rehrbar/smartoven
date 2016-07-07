@@ -43,6 +43,6 @@ public abstract class HomeAppliance {
 	}
 	
 	public void stopProgram(){
-		client.StopProgram();
+		client.stopProgram(haId);
 	}
 }

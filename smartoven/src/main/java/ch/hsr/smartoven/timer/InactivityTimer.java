@@ -1,35 +1,36 @@
-package ch.hsr.sjost.oven.timer;
+package ch.hsr.smartoven.timer;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import ch.hsr.sjost.oven.main.OvenMain;
-import ch.hsr.sjost.oven.speaking.SpeechUtil;
+import ch.hsr.smartoven.client.OvenClient;
 
 public class InactivityTimer{
 
 	private static final int TIMEOUT = 15;
 	private Timer timer;
 	
-	public InactivityTimer(OvenMain ovenMain){
+	public InactivityTimer(OvenClient ovenMain){
 		 timer = new Timer();
 		 timer.schedule(new ResetTask(ovenMain), TIMEOUT * 1000);
 	}
 	
 	class ResetTask extends TimerTask {
-		private OvenMain ovenMain;
-	    public ResetTask(OvenMain ovenMain){
+		private OvenClient ovenMain;
+	    public ResetTask(OvenClient ovenMain){
 	    	this.ovenMain = ovenMain;
 	    }
 		public void run() {
-			SpeechUtil.talkMessage("Time's up!");
-	      ovenMain.reset();
-	      timer.cancel();
+			if(ovenMain.getCurrentState() != null){
+				System.out.println("Time is up. Reset State");
+			    ovenMain.reset();
+			}
 	      resetTimer(ovenMain);
 	    }
 	  }
 	
-	public void resetTimer(OvenMain ovenMain){
+	public void resetTimer(OvenClient ovenMain){
+		timer.cancel();
 		timer = new Timer();
 		timer.schedule(new ResetTask(ovenMain), TIMEOUT * 1000);
 	}
