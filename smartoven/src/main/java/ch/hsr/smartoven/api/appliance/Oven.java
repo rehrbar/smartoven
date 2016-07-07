@@ -8,12 +8,26 @@ public class Oven extends HomeAppliance {
 		super(client, brand, vib, connected, HomeApplianceType.OVEN, enumber, haId);
 	}
 	
-	public void StartProgram(CookingProgram program, int temperature, int duration){
+	private boolean isBaking = false;
+	
+	public void startProgram(CookingProgram program, int temperature, int duration){
 		String body = String.format("{\"data\": {\"key\": \"%s\", \"options\": ["+
 				"{\"key\": \"Cooking.Oven.Option.SetpointTemperature\",\"value\": %d,\"unit\": \"°C\"}"+
 				",{\"key\": \"BSH.Common.Option.Duration\",\"value\": %d,\"unit\": \"seconds\"}"+
 				"]}}", program, temperature, duration);
 		
-		this.client.StartProgram(this.haId, body);
+		this.client.startProgram(this.haId, body);
+	}
+	
+	public void stopProgram(){
+		this.client.stopProgram(this.haId);
+	}
+	
+	public void setIsBaking(boolean isBaking){
+		this.isBaking = isBaking;
+	}
+	
+	public boolean isBaking(){
+		return this.isBaking;
 	}
 }

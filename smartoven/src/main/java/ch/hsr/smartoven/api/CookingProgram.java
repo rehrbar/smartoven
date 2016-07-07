@@ -16,4 +16,18 @@ public enum CookingProgram {
     public String toString(){
     	return value;
     }
+    
+    public static CookingProgram mapProgramToString(String str){
+    	str = str.toLowerCase();
+    	if(str.contains("pizza")){
+    		return PIZZASETTING;
+    	} else if(str.contains("preheating")){
+    		return PREHEATING;
+    	} else if(str.contains("hotair")){
+    		return HOTAIR;
+    	} else if(str.contains("topbottom")){
+    		return TOPBOTTOMHEATING;
+    	}
+    	return PIZZASETTING;
+    }
 }
