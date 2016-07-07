@@ -22,7 +22,7 @@ GPIO.setup(ledPin,GPIO.OUT) # LED output
 
 # Enable all buttons and add event
 for pin in buttonPins:
-    GPIO.setup(pin,GPIO.IN)
+    GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.add_event_detect(pin, GPIO.FALLING, callback=button_callback, bouncetime=600)
 
 client.on_connect = on_connect
