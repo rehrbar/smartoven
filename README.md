@@ -38,27 +38,7 @@ sudo apt-get install openjdk-8-jdk maven
 Installation von Python3 und dazugehörigen Paketen:
 ```
 sudo apt-get install python3 python3-pip python3-rpi.gpio
-sudo pip3 install virtualenv
-```
-### Virtualenv vorbereiten
-
-Um Konflikte mit anderen Paketen und Python-Installationen vorzubeugen
-setzen wir auf Virtualenv (mehr Infos unter https://virtualenv.pypa.io/en/latest/).
-```
-virtualenv challp-env
-source challp-env/bin/activate
-pip install paho-mqtt rpi.gpio
-```
-
-Für die spätere Verwendung sollte jeweils in der virtuellen Umgebung
-gearbeitet werden.
-```
-source challp-env/bin/activate
-```
-
-Verlassen der virtuellen Umgebung.
-```
-deactivate
+sudo pip3 install paho-mqtt
 ```
 
 ### Projekt klonen
