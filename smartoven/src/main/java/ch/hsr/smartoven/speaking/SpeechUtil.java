@@ -8,8 +8,8 @@ public class SpeechUtil {
 	public static void talkMessage(String message){
 		
 		try {
-			message = message.replace(" ", "_");
-			Process p = Runtime.getRuntime().exec("espeak \"" + message +"\"");
+			ProcessBuilder pb = new ProcessBuilder("espeak", message);
+			Process p = pb.start();
 			p.waitFor();
 		} catch (IOException e) {
 			e.printStackTrace();
