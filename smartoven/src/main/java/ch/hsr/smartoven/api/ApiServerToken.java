@@ -8,6 +8,7 @@ import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.client.response.GitHubTokenResponse;
+import org.apache.oltu.oauth2.client.response.OAuthAccessTokenResponse;
 import org.apache.oltu.oauth2.common.OAuthProviderType;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
@@ -17,11 +18,14 @@ public class ApiServerToken {
 	public static void GetToken() throws OAuthSystemException, IOException {
 
 		try {
+			final String redirectUrl = "http://example.com";
+			final String apiKey = "072b7d29a73c6a2cde7c31055d90be1ce85950f6c02752376c605ecea8132a9c";
+			
 			OAuthClientRequest request = OAuthClientRequest
 					.authorizationLocation("https://api.home-connect.com/security/oauth/authorize")
-					.setClientId("0d6254051cba5975f916a4004b9e04a5e39baaca348c2a7868b3a1865ac05d8b")
-					.setRedirectURI("https://www.example.com/redirect")
-					.setScope("IdentifyAppliance")
+					.setClientId(apiKey)
+					.setRedirectURI(redirectUrl)
+					.setScope("IdentifyAppliance MonitorAppliance ControlAppliance")
 					.setResponseType("code")
 					.buildQueryMessage();
 
@@ -33,11 +37,12 @@ public class ApiServerToken {
 			String code = br.readLine();
 
 			request = OAuthClientRequest
-					.tokenLocation("https://graph.facebook.com/oauth/access_token")
+					.tokenLocation("https://api.home-connect.com/security/oauth/token")
 					.setGrantType(GrantType.AUTHORIZATION_CODE)
-					.setClientSecret("3acb294b071c9aec86d60ae3daf32a93")
-					.setRedirectURI("https://www.example.com/redirect")
-					.setCode(code).buildBodyMessage();
+					.setClientId(apiKey)
+					.setRedirectURI(redirectUrl)
+					.setCode(code)
+					.buildBodyMessage();
 
 			OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
 
@@ -48,7 +53,8 @@ public class ApiServerToken {
 			// Own response class is an easy way to deal with oauth providers
 			// that introduce modifications to
 			// OAuth specification
-			GitHubTokenResponse oAuthResponse = oAuthClient.accessToken(request, GitHubTokenResponse.class);
+			OAuthAccessTokenResponse oAuthResponse = oAuthClient.accessToken(request);
+			//GitHubTokenResponse oAuthResponse = oAuthClient.accessToken(request, GitHubTokenResponse.class);
 
 			System.out.println("Access Token: " + oAuthResponse.getAccessToken() + ", Expires in: "
 					+ oAuthResponse.getExpiresIn());
