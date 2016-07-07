@@ -3,16 +3,12 @@ package ch.hsr.smartoven;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
-import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttSecurityException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-
-import ch.hsr.smartoven.api.ApiServerToken;
 
 import ch.hsr.smartoven.api.Client;
 import ch.hsr.smartoven.api.CookingProgram;
@@ -36,7 +32,9 @@ public class ApplicationStart {
 
 		try {
 			//TODO: Get Oven from Home Appliances
-			Oven ovenImpl = new Oven(new Client("http://api.home-connect.com/api"), "SIEMENS", "CS658GRS6", true, "CS658GRS6/01", "SIEMENS-CS658GRS6-68A40E0037D7");
+			String baseUri = "https://api.home-connect.com/api";
+			String accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0Njg0ODQ0NzgsImF6cCI6ImI5NjlkMWRlMGZlMzc0OTMzYzUwNWI3ZjUxZjAwNDA1YmZjZTc0NjIxNDc1YzVkYWI1MjUwMGM5MGRiYzBmZmIiLCJzdWIiOiJoY2FBcGkiLCJzY29wZSI6WyJJZGVudGlmeUFwcGxpYW5jZSIsIk1vbml0b3JBcHBsaWFuY2UiLCJDb250cm9sQXBwbGlhbmNlIl0sImFjY291bnRJZCI6IjUxZWJjYWVmLTViMjUtNDkzMS1iZDNjLTlmYmE4NzRiZGFlMCIsInRva2VuIjoiMGI1MzE1YWItYjU3Yy00MWE1LTk3NzktZWRjZmNkOTU2NDgwIiwiaXNzIjoiNTFlYmNhZWYtNWIyNS00OTMxLWJkM2MtOWZiYTg3NGJkYWUwIiwiaWF0IjoxNDY3ODc5Njc4fQ.KY9aSJqxM7gr1nmM9KzrF2jlMIUogcx8EL9jC46bgoE";
+			Oven ovenImpl = new Oven(new Client(baseUri, accessToken), "SIEMENS", "CS658GRS6", true, "CS658GRS6/01", "SIEMENS-CS658GRS6-68A40E0037D7");
 			
 			OvenClient ovenClient = setupOvenClient(ovenImpl);
 			
@@ -96,7 +94,6 @@ public class ApplicationStart {
 
 		ExecuteCommand stopCommand = new ExecuteCommand() {
 			
-			@Override
 			public void execute(OvenState state) {
 				if(state.getSelectedValue().equals("Stop Program") && state.getStatename().equals("Choose Action State")){
 					oven.stopProgram();
@@ -110,9 +107,11 @@ public class ApplicationStart {
 		actionOptions.add(new OvenOption("Start Program", chooseModeStatus));
 		ExecuteCommand startCommand = new ExecuteCommand() {
 			
-			@Override
 			public void execute(OvenState state) {
-					oven.startProgram(CookingProgram.mapProgramToString(state.getPrevious().getPrevious().getSelectedValue()), Integer.parseInt(state.getPrevious().getSelectedValue()), Integer.parseInt(state.getSelectedValue()));
+					CookingProgram program = CookingProgram.mapProgramToString(state.getPrevious().getPrevious().getSelectedValue());
+					int temperature = Integer.parseInt(state.getPrevious().getSelectedValue());
+					int minutes = Integer.parseInt(state.getSelectedValue());
+					oven.startProgram(program, temperature, minutes * 60);
 					oven.setIsBaking(true);
 					SpeechUtil.talkMessage("Starting Program now");
 					mainStatus.setMessageText(oven.isBaking()?"Oven is Baking":"Oven is Not Baking");
