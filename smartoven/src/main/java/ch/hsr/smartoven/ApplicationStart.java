@@ -16,6 +16,7 @@ import ch.hsr.smartoven.api.CookingProgram;
 import ch.hsr.smartoven.api.appliance.Oven;
 import ch.hsr.smartoven.client.OvenClient;
 import ch.hsr.smartoven.http.ExecuteCommand;
+import ch.hsr.smartoven.speaking.SpeechUtil;
 import ch.hsr.smartoven.state.OvenOption;
 import ch.hsr.smartoven.state.OvenState;
 import ch.hsr.smartoven.state.OvenStateList;
@@ -75,12 +76,12 @@ public class ApplicationStart {
 	}
 
 	private static OvenClient setupOvenClient(final Oven oven) {
-		String mainStatusString = oven.isBaking()?"Oven Status is Baking":"Oven Status is Not Baking";
+		String mainStatusString = oven.isBaking()?"Oven is Baking":"Oven is Not Baking";
 		final OvenStateList mainStatus = new OvenStateList("Main State", mainStatusString);
 		OvenStateList chooseActionStatus = new OvenStateList("Choose Action State", "Choose Action");
 		OvenStateList chooseModeStatus = new OvenStateList("Choose Mode State", "Choose Mode");
-		OvenStateNumber timeStatus = new OvenStateNumber("Time State", "Select Heat", 1, 2, 1, 120, mainStatus);
-		OvenStateNumber heatStatus = new OvenStateNumber("Heat State", "Select Time", 10, 180, 100, 250, timeStatus);
+		OvenStateNumber timeStatus = new OvenStateNumber("Time State", "Select Time", "Minutes", 1, 2, 1, 120, mainStatus);
+		OvenStateNumber heatStatus = new OvenStateNumber("Heat State", "Select Heat", "Degrees", 10, 180, 100, 250, timeStatus);
 		List<OvenOption> modeOptions = new ArrayList<OvenOption>();
 		modeOptions.add(new OvenOption("Pizza", heatStatus));
 		modeOptions.add(new OvenOption("Hotair", heatStatus));
@@ -98,6 +99,7 @@ public class ApplicationStart {
 				if(state.getSelectedValue().equals("Stop Program") && state.getStatename().equals("Choose Action State")){
 					oven.stopProgram();
 					oven.setIsBaking(false);
+					SpeechUtil.talkMessage("Stopping Program");
 					mainStatus.setMessageText(oven.isBaking()?"Oven Status is Baking":"Oven Status is Not Baking");
 				}
 				
@@ -110,17 +112,17 @@ public class ApplicationStart {
 			public void execute(OvenState state) {
 					oven.startProgram(CookingProgram.mapProgramToString(state.getPrevious().getPrevious().getSelectedValue()), Integer.parseInt(state.getPrevious().getSelectedValue()), Integer.parseInt(state.getSelectedValue()));
 					oven.setIsBaking(true);
-					mainStatus.setMessageText(oven.isBaking()?"Oven Status is Baking":"Oven Status is Not Baking");
+					SpeechUtil.talkMessage("Starting Program now");
+					mainStatus.setMessageText(oven.isBaking()?"Oven is Baking":"Oven is Not Baking");
 				
 			}
 		};
-		actionOptions.add(new OvenOption("Set Program", chooseModeStatus));
 		chooseActionStatus.setOptions(actionOptions);
 		chooseActionStatus.setSendFunction(stopCommand);
 		timeStatus.setSendFunction(startCommand);
 		
 		List<OvenOption> mainOptions = new ArrayList<OvenOption>();
-		mainOptions.add(new OvenOption("Choose Program", chooseActionStatus));
+		mainOptions.add(new OvenOption("Choose Action", chooseActionStatus));
 		mainStatus.setOptions(mainOptions);
 		
 		OvenClient ovenClient = new OvenClient(mainStatus);
