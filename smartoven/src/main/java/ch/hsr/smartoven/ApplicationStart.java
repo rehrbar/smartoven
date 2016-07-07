@@ -36,12 +36,13 @@ public class ApplicationStart {
 
 		try {
 			//TODO: Get Oven from Home Appliances
-			Oven ovenImpl = new Oven(new Client("http://api.home-connect.com/api"), "SIEMENS", "1234", true, "5678", "SIEMENS-blah");
+			Oven ovenImpl = new Oven(new Client("http://api.home-connect.com/api"), "SIEMENS", "CS658GRS6", true, "CS658GRS6/01", "SIEMENS-CS658GRS6-68A40E0037D7");
 			
 			OvenClient ovenClient = setupOvenClient(ovenImpl);
 			
 			InactivityTimer inactivityTimer = new InactivityTimer(ovenClient);
-			
+
+			MemoryPersistence persistence = new MemoryPersistence();
 			MqttClient sampleClient = new MqttClient(config.getMqttBroker(), config.getClientId(), persistence);
 			setupMqttReciever(config, sampleClient, ovenClient, inactivityTimer);
 			
