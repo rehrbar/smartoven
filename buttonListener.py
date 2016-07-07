@@ -5,7 +5,7 @@ import time
 import paho.mqtt.client as mqtt
 print("RPi.GPIO version: " + GPIO.VERSION)
 
-buttonPins = {12:'UP',13:'RIGHT',14:'DOWN',15:'LEFT'}
+buttonPins = {5:'UP',12:'RIGHT',14:'DOWN',19:'LEFT'}
 ledPin = 2
 client = mqtt.Client()
 
