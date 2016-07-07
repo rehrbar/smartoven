@@ -48,7 +48,7 @@ public abstract class OvenState {
 	public abstract OvenState moveRight();
 	
 	public void enter(){
-//		SpeechUtil.talkMessage(messageText);
+		SpeechUtil.talkMessage(messageText);
 		System.out.println(messageText);
 	}
 

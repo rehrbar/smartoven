@@ -66,12 +66,12 @@ public class OvenStateList extends OvenState {
 	
 	@Override
 	public void enter(){
-//		SpeechUtil.talkMessage(messageText+". Is "+options.get(selectedOption));
+		SpeechUtil.talkMessage(messageText+". Is "+options.get(selectedOption));
 		System.out.println(messageText+". Option is "+options.get(selectedOption));
 	}
 	
 	public void repeatOption(){
-//		SpeechUtil.talkMessage("Selected is "+options.get(selectedOption));
+		SpeechUtil.talkMessage("Selected is "+options.get(selectedOption));
 		System.out.println("Selected is "+options.get(selectedOption));
 	}
 

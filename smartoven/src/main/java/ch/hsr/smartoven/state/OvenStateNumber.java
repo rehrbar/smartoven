@@ -32,7 +32,7 @@ public class OvenStateNumber extends OvenState {
 	public OvenState moveUp() {
 		if(value<upperLimit)
 			value = value+interval;
-		enter();
+		repeatOption();
 		return this;
 	}
 
@@ -40,7 +40,7 @@ public class OvenStateNumber extends OvenState {
 	public OvenState moveDown() {
 		if(value>lowerLimit)
 		value = value-interval;
-		enter();
+		repeatOption();
 		return this;
 	}
 
@@ -54,8 +54,13 @@ public class OvenStateNumber extends OvenState {
 	
 	@Override
 	public void enter(){
-//		SpeechUtil.talkMessage("The selected Value is "+value);
-		System.out.println("The selected Value is "+value);
+		SpeechUtil.talkMessage(messageText+". Value is "+value);
+		System.out.println(messageText+". Value is "+value);
+	}
+	
+	public void repeatOption(){
+		SpeechUtil.talkMessage("Selected Value is "+value);
+		System.out.println("Selected Value is "+value);
 	}
 
 	@Override
